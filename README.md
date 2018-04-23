@@ -1,18 +1,47 @@
-# React Component Boilerplate
+# react-paginate-x
 
-A simple React boilerplate that outputs to ES5 and ES6.
+A bare-bones React component for pagination UI that doesn't require CSS.
 
-## Getting started
+## Install
+
+With npm:
 
 ```bash
-git clone git@github.com:escaladesports/react-component-boilerplate.git --depth=1 your-component
-cd your-component
-rm -rf .git
+npm install --save react-paginate-x
 ```
 
-Also make sure to edit the `package.json` file with a new name, version number, author, and anything else you might need.
+Or with Yarn:
+
+```bash
+yarn add react-paginate-x
+```
 
 ## Usage
 
-- `yarn dev`: Runs a local dev server from the `dev` directory
-- `yarn analyze`: View bundle sizes
+```jsx
+import Pagination from 'react-paginate-x'
+
+...
+
+<Pagination currentPage={1} totalPages={50} />
+```
+
+To use with the default or a custom link element:
+
+```jsx
+<Pagination
+	link={(n, text) => (
+		<a href={`/page/${n}`}>{text}</a>
+	)}
+	currentPage={1}
+	totalPages={50} />
+```
+
+Or to use with an onClick handler:
+
+```jsx
+<Pagination
+	onClick={n => console.log('Go to page', n)}
+	currentPage={1}
+	totalPages={50} />
+```

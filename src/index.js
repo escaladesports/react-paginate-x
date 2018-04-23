@@ -29,7 +29,7 @@ class Paginate extends React.Component {
 						className={`PaginateXPage ${data.isActive ? 'PaginateXCurrent' : 'PaginateXLink'}`}
 						key={`PaginateX${data.key}`}
 						>
-						{link(data.value)}
+						{link(data.value, data.value)}
 					</li>
 				)
 			}
@@ -49,33 +49,63 @@ class Paginate extends React.Component {
 			totalPages,
 			previous,
 			next,
+			first,
+			last,
 			onClick,
+			link,
+			hideInactive,
 		} = this.props
+		const isFirst = currentPage === 1
+		const isLast = currentPage === totalPages
 		return (
 			<ul className='PaginateX'>
-				{previous &&
+				{first && (!hideInactive || !isFirst) &&
 					<li
-						className={`PaginateXPrev ${currentPage > 1 ? 'PaginateXLink' : ''}`}
+						className={`PaginateXFirst ${isFirst ? '' : 'PaginateXLink'}`}
 						onClick={() => {
-							if (currentPage > 1) {
+							if (!isFirst) {
+								onClick(1)
+							}
+						}}
+						>
+						{link(1, first)}
+					</li>
+				}
+				{previous && (!hideInactive || !isFirst) &&
+					<li
+						className={`PaginateXPrev ${isFirst ? '' : 'PaginateXLink'}`}
+						onClick={() => {
+							if (!isFirst) {
 								onClick(currentPage - 1)
 							}
 						}}
 						>
-						{previous}
+						{link(currentPage - 1, previous)}
 					</li>
 				}
 				{this.createPagination()}
-				{next &&
+				{next && (!hideInactive || !isLast) &&
 					<li
-						className={`PaginateXNext ${currentPage < totalPages ? 'PaginateXLink' : ''}`}
+						className={`PaginateXNext ${isLast ? '' : 'PaginateXLink'}`}
 						onClick={() => {
-							if (currentPage < totalPages){
+							if (!isLast){
 								onClick(currentPage + 1)
 							}
 						}}
 						>
-						{next}
+						{link(currentPage + 1, next)}
+					</li>
+				}
+				{last && (!hideInactive || !isLast) &&
+					<li
+						className={`PaginateXLast ${isLast ? '' : 'PaginateXLink'}`}
+						onClick={() => {
+							if (!isLast) {
+								onClick(totalPages)
+							}
+						}}
+						>
+						{link(totalPages, last)}
 					</li>
 				}
 				<style jsx global>{`
@@ -84,17 +114,13 @@ class Paginate extends React.Component {
 						margin: 0;
 						padding: 0;
 						user-select: none;
-					}
-					.PaginateXPrev,
-					.PaginateXNext,
-					.PaginateXBreak,
-					.PaginateXPage{
-						display: inline-block;
-						padding: 5px;
+						li{
+							display: inline-block;
+							padding: 5px;
+						}
 					}
 					.PaginateXLink{
 						cursor: pointer;
-						text-decoration: underline;
 					}
 				`}</style>
 			</ul>
@@ -105,10 +131,13 @@ class Paginate extends React.Component {
 Paginate.defaultProps = {
 	previous: 'previous',
 	next: 'next',
+	first: 'first',
+	last: 'last',
 	breakDelimiter: '...',
 	currentPage: 1,
 	boundaryPagesRange: 2,
-	link: p => p,
+	hideInactive: false,
+	link: (n, t) => t,
 }
 
 export default Paginate

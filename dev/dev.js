@@ -17,6 +17,7 @@ class Test extends React.Component{
 			<Paginate
 				currentPage={this.state.page}
 				totalPages={50}
+				hideInactive
 				onClick={page => this.setState({ page })}
 			/>
 		)
@@ -24,6 +25,13 @@ class Test extends React.Component{
 }
 
 render(
-	<Test />,
+	<div>
+		<Test />
+		<style jsx global>{`
+			.PaginateXLink{
+				text-decoration: underline;
+			}
+		`}</style>
+	</div>,
 	containerEl
 )
