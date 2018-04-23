@@ -7,6 +7,7 @@ class Paginate extends React.Component {
 			currentPage,
 			totalPages,
 			boundaryPagesRange,
+			siblingPagesRange,
 			breakDelimiter,
 			onClick,
 			link,
@@ -16,7 +17,7 @@ class Paginate extends React.Component {
 			currentPage,
 			totalPages,
 			boundaryPagesRange,
-			siblingPagesRange: 2,
+			siblingPagesRange,
 			hidePreviousAndNextPageLinks: true,
 			hideFirstAndLastPageLinks: true,
 		})
@@ -131,11 +132,12 @@ class Paginate extends React.Component {
 Paginate.defaultProps = {
 	previous: 'previous',
 	next: 'next',
-	first: 'first',
-	last: 'last',
+	first: false,
+	last: false,
 	breakDelimiter: '...',
 	currentPage: 1,
 	boundaryPagesRange: 2,
+	siblingPagesRange: 2,
 	hideInactive: false,
 	link: (n, t) => t,
 }
