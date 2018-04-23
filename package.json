@@ -1,0 +1,32 @@
+{
+  "name": "react-paginate-x",
+  "version": "0.0.0",
+  "keywords": [
+    "react",
+    "paginate",
+    "x"
+  ],
+  "main": "dist/index.js",
+  "author": "Kennedy Rose <krose@escaladesports.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/escaladesports/react-paginate-x.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "analyze": "esca-scripts analyze --react --component --input ./src/index.js",
+    "build": "esca-scripts build --react --component --babel --input src --output dist --multiple",
+    "dev": "esca-scripts dev ---input './dev/dev.js, ./dev/index.html' --react --browser",
+    "prepublishOnly": "npm run build",
+    "reset": "esca-scripts reset",
+    "test": "echo 'no test'",
+    "travis": "opn https://travis-ci.org/escaladesports/react-paginate-x/branches"
+  },
+  "devDependencies": {
+    "esca-scripts": "^0.14.7",
+    "opn-cli": "^3.1.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1"
+  },
+  "dependencies": {}
+}
