@@ -1,15 +1,29 @@
 import React from 'react'
 import { render } from 'react-dom'
-import Img from '../src/index'
+import Paginate from '../src'
 
 const containerEl = document.createElement('div')
 document.body.appendChild(containerEl)
 
+class Test extends React.Component{
+	constructor(props){
+		super(props)
+		this.state = {
+			page: 1
+		}
+	}
+	render(){
+		return (
+			<Paginate
+				currentPage={this.state.page}
+				totalPages={50}
+				onClick={page => this.setState({ page })}
+			/>
+		)
+	}
+}
+
 render(
-	<Img
-		src='http://via.placeholder.com/500x1000'
-		width={500}
-		height={1000}
-	/>,
+	<Test />,
 	containerEl
 )

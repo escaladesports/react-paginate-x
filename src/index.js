@@ -1,79 +1,114 @@
 import React from 'react'
+import { getPaginationModel } from 'ultimate-pagination'
 
-export default class extends React.Component {
-	constructor(props){
-		super(props)
-		this.state = { loading: false }
-		this.hideLoader = this.hideLoader.bind(this)
-		this.showLoader = this.showLoader.bind(this)
-		this.startTimeout = this.startTimeout.bind(this)
+class Paginate extends React.Component {
+	createPagination(){
+		const {
+			currentPage,
+			totalPages,
+			boundaryPagesRange,
+			breakDelimiter,
+			onClick,
+			link,
+		} = this.props
+
+		const paginationModel = getPaginationModel({
+			currentPage,
+			totalPages,
+			boundaryPagesRange,
+			siblingPagesRange: 2,
+			hidePreviousAndNextPageLinks: true,
+			hideFirstAndLastPageLinks: true,
+		})
+
+		return paginationModel.map((data, key) => {
+			if(data.type === 'PAGE'){
+				return (
+					<li
+						onClick={() => onClick(data.value)}
+						className={`PaginateXPage ${data.isActive ? 'PaginateXCurrent' : 'PaginateXLink'}`}
+						key={`PaginateX${data.key}`}
+						>
+						{link(data.value)}
+					</li>
+				)
+			}
+			return (
+				<li
+					className='PaginateXBreak'
+					key={`PaginateX${data.key}`}
+					>
+					{breakDelimiter}
+				</li>
+			)
+		})
 	}
-	componentWillReceiveProps() {
-		this.startTimeout()
-	}
-	componentDidMount() {
-		if (this.img.complete) {
-			this.hideLoader()
-		}
-		else {
-			this.startTimeout()
-		}
-	}
-	startTimeout() {
-		clearTimeout(this.timeout)
-		this.timeout = setTimeout(this.showLoader, 100)
-	}
-	showLoader() {
-		if (!this.img.complete) {
-			this.setState({ loading: true })
-		}
-	}
-	hideLoader() {
-		clearTimeout(this.timeout)
-		this.setState({ loading: false })
-	}
-	render(){
-		const TagName = this.props.tagName || 'img'
+	render() {
+		const {
+			currentPage,
+			totalPages,
+			previous,
+			next,
+			onClick,
+		} = this.props
 		return (
-			<div style={{
-				maxWidth: this.props.width,
-				maxHeight: this.props.height,
-				margin: this.props.center ? 'auto' : ''
-			}}>
-				<div style={{
-					position: 'relative',
-					paddingBottom: `${(this.props.height / this.props.width) * 100}%`
-				}}>
-					<TagName
-						type={this.props.type}
-						srcSet={this.props.srcSet}
-						sizes={this.props.sizes}
-						src={this.props.src}
-						ref={img => this.img = img}
-						onLoad={this.hideLoader}
-						onError={this.hideLoader}
-						alt={this.props.alt}
-						style={{
-							position: 'absolute',
-							width: '100%',
-							maxWidth: '100%',
-							top: 0,
-							left: 0,
-							display: this.state.loading ? 'none' : 'block'
+			<ul className='PaginateX'>
+				{previous &&
+					<li
+						className={`PaginateXPrev ${currentPage > 1 ? 'PaginateXLink' : ''}`}
+						onClick={() => {
+							if (currentPage > 1) {
+								onClick(currentPage - 1)
+							}
 						}}
-					/>
-					{this.state.loading && this.props.loading &&
-						<div style={{
-								position: 'absolute',
-								top: '50%',
-								left: '50%',
-								transform: 'translate(-50%, -50%)'
-						}}>
-							{this.props.loading}
-						</div>
+						>
+						{previous}
+					</li>
+				}
+				{this.createPagination()}
+				{next &&
+					<li
+						className={`PaginateXNext ${currentPage < totalPages ? 'PaginateXLink' : ''}`}
+						onClick={() => {
+							if (currentPage < totalPages){
+								onClick(currentPage + 1)
+							}
+						}}
+						>
+						{next}
+					</li>
+				}
+				<style jsx global>{`
+					.PaginateX{
+						list-style-type: none;
+						margin: 0;
+						padding: 0;
+						user-select: none;
 					}
-				</div>
-			</div>
+					.PaginateXPrev,
+					.PaginateXNext,
+					.PaginateXBreak,
+					.PaginateXPage{
+						display: inline-block;
+						padding: 5px;
+					}
+					.PaginateXLink{
+						cursor: pointer;
+						text-decoration: underline;
+					}
+				`}</style>
+			</ul>
 		)
 	}
 }
+
+Paginate.defaultProps = {
+	previous: 'previous',
+	next: 'next',
+	breakDelimiter: '...',
+	currentPage: 1,
+	boundaryPagesRange: 2,
+	link: p => p,
+}
+
+export default Paginate
