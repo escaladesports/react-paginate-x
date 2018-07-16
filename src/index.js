@@ -109,21 +109,21 @@ class Paginate extends React.Component {
 						{link(totalPages, last)}
 					</li>
 				}
-				<style jsx global>{`
+				<style dangerouslySetInnerHTML={{__html: `
 					.PaginateX{
 						list-style-type: none;
 						margin: 0;
 						padding: 0;
 						user-select: none;
-						li{
-							display: inline-block;
-							padding: 5px;
-						}
+					}
+					.PaginateX li{
+						display: inline-block;
+						padding: 5px;
 					}
 					.PaginateXLink{
 						cursor: pointer;
 					}
-				`}</style>
+				`}} />
 			</ul>
 		)
 	}
